@@ -1,0 +1,12 @@
+.transactionPage{
+    display: flex;
+    justify-content:space-between;
+    background-color: gold;
+    
+  }
+  .transactionShow{
+  background-color: aqua;
+  }
+  .formTransaction{
+  background-color: palevioletred;
+  }

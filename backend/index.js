@@ -1,31 +1,29 @@
 import express from 'express';
-import mongoose from 'mongoose';
-import cors from 'cors';
 import dotenv from 'dotenv';
+import connectDB from './config/db.js';
+import authRoutes from './routes/authRoutes.js';
+import categoryRoutes from './routes/categoryRoutes.js';
+import transactionRoutes from './routes/transactionRoutes.js';
+import { errorHandler } from './middlewares/errorMiddleware.js';
+import cors from 'cors';
+// import statsRoutes from './routes/statsRoutes.js';
 
 dotenv.config();
 
+ connectDB();
+
 const app = express();
-const port = process.env.PORT || 5000;
+app.use(express.json(),cors());
 
-app.use(cors());
-app.use(express.json());
+app.use('/api/auth', authRoutes);
+app.use('/api/categories', categoryRoutes);
+app.use('/api/transactions', transactionRoutes);
+// app.use('/api/stats', statsRoutes);
 
+app.use(errorHandler);
 
-// mongoose.connect(process.env.MONGO_URI, {
-//   useNewUrlParser: true,
-//   useUnifiedTopology: true,
-// });
+const PORT = process.env.PORT || 5000;
 
-// const connection = mongoose.connection;
-// connection.once('open', () => {
-//   console.log('MongoDB database connection established successfully');
-// });
-
-// app.get('/', (req, res) => {
-//   res.send('Hello from the backend!');
-// });
-
-app.listen(port, () => {
-  console.log(`Server is running on port: ${port}`);
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
