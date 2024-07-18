@@ -1,20 +1,25 @@
-// frontend/src/App.js
-import React from 'react';
-
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Register from './components/Register';
+import Login from './components/Login';
+import { AuthProvider } from './context/AuthContext';
+import Home from './pages/Home';
+import './App.css';
 
 const App = () => {
-    return (
-        <div className="App">
-            <header className="App-header">
-                <h1>My React App</h1>
-            </header>
-            <main>
-                <div className="container mt-4">
-          
-                </div>
-            </main>
-        </div>
-    );
+  return (
+    <Router>
+      
+        <AuthProvider>
+          <Routes>
+            <Route path="/register" element={<Register />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/" element={<Home />} />
+          </Routes>
+        </AuthProvider>
+      
+    </Router>
+  );
 };
 
 export default App;
