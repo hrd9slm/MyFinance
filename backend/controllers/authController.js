@@ -34,3 +34,13 @@ export const login = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+
+export const getUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.user).select('-password');
+    res.json(user);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send('Server error');
+  }
+};

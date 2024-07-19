@@ -1,15 +1,28 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, useContext } from 'react';
 import axios from 'axios';
+import { AuthContext } from './AuthContext';
 
 export const TransactionContext = createContext();
+
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:5000/api'
+  baseURL: 'http://localhost:5000/api',
 });
 
 export const TransactionProvider = ({ children }) => {
+  const { auth } = useContext(AuthContext);
   const [transactions, setTransactions] = useState([]);
   const [categories, setCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  // Ajouter un intercepteur pour inclure le token dans les en-têtes de chaque requête
+  axiosInstance.interceptors.request.use((config) => {
+    if (auth.token) {
+      config.headers['Authorization'] = `Bearer ${auth.token}`;
+    }
+    return config;
+  }, (error) => {
+    return Promise.reject(error);
+  });
 
   useEffect(() => {
     const fetchTransactions = async () => {
@@ -28,13 +41,13 @@ export const TransactionProvider = ({ children }) => {
       } catch (error) {
         console.error('Error fetching categories:', error);
       } finally {
-        setIsLoading(false); // Marque le chargement comme terminé une fois que toutes les données sont chargées
+        setIsLoading(false); 
       }
     };
 
     fetchTransactions();
     fetchCategories();
-  }, []);
+  }, [auth.token]); 
 
   const addTransaction = async (transaction) => {
     try {
@@ -46,7 +59,7 @@ export const TransactionProvider = ({ children }) => {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>; // Afficher un indicateur de chargement tant que les données sont en cours de chargement
+    return <div>Loading...</div>; 
   }
 
   return (

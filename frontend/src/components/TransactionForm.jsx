@@ -11,7 +11,7 @@ const TransactionForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const newTransaction = { transaction, amount, date, category };
+    const newTransaction = { description:transaction, amount, date, category };
     addTransaction(newTransaction);
     setTransaction('');
     setAmount('');
@@ -20,47 +20,51 @@ const TransactionForm = () => {
   };
 
   return (
-  <div className='formTransaction'>
-       <Form onSubmit={handleSubmit} >
-    <Form.Group controlId="formTransaction">
-      <Form.Label>Transaction</Form.Label>
-      <Form.Control 
-        type="text" 
-        value={transaction} 
-        onChange={(e) => setTransaction(e.target.value)} 
-      />
-    </Form.Group>
-    <Form.Group controlId="formAmount">
-      <Form.Label>Montant</Form.Label>
-      <Form.Control 
-        type="number" 
-        value={amount} 
-        onChange={(e) => setAmount(e.target.value)} 
-      />
-    </Form.Group>
-    <Form.Group controlId="formDate">
-      <Form.Label>Date de Transaction</Form.Label>
-      <Form.Control 
-        type="date" 
-        value={date} 
-        onChange={(e) => setDate(e.target.value)} 
-      />
-    </Form.Group>
-    <Form.Group controlId="formCategory">
-      <Form.Label>Catégorie</Form.Label>
-      <Form.Control 
-        as="select" 
-        value={category} 
-        onChange={(e) => setCategory(e.target.value)} 
-      >
-        {categories.map(cat => (
-          <option key={cat._id} value={cat._id}>{cat.name}</option>
-        ))}
-      </Form.Control>
-    </Form.Group>
-    <Button variant="primary" type="submit">Ajouter</Button>
-  </Form> 
-  </div>
+    <div className='formTransaction'>
+      <Form onSubmit={handleSubmit}>
+        <Form.Group controlId="formTransaction" className="form-group">
+          <Form.Label className="form-label">Transaction</Form.Label>
+          <Form.Control 
+            type="text" 
+            value={transaction} 
+            onChange={(e) => setTransaction(e.target.value)} 
+            className="form-control"
+          />
+        </Form.Group>
+        <Form.Group controlId="formAmount" className="form-group">
+          <Form.Label className="form-label">Montant</Form.Label>
+          <Form.Control 
+            type="number" 
+            value={amount} 
+            onChange={(e) => setAmount(e.target.value)} 
+            className="form-control"
+          />
+        </Form.Group>
+        <Form.Group controlId="formDate" className="form-group">
+          <Form.Label className="form-label">Date de Transaction</Form.Label>
+          <Form.Control 
+            type="date" 
+            value={date} 
+            onChange={(e) => setDate(e.target.value)} 
+            className="form-control"
+          />
+        </Form.Group>
+        <Form.Group controlId="formCategory" className="form-group">
+          <Form.Label className="form-label">Catégorie</Form.Label>
+          <Form.Control 
+            as="select" 
+            value={category} 
+            onChange={(e) => setCategory(e.target.value)} 
+            className="form-control"
+          >
+            {categories.map(cat => (
+              <option key={cat._id} value={cat._id}>{cat.name}</option>
+            ))}
+          </Form.Control>
+        </Form.Group>
+        <Button variant="primary" type="submit" className="btn-primary">Ajouter</Button>
+      </Form> 
+    </div>
   );
 };
 

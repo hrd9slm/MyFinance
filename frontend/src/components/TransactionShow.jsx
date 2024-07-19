@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Card, Row, Col } from 'react-bootstrap';
+import { Card } from 'react-bootstrap';
 import { TransactionContext } from '../context/TransactionContext';
 import { FaMoneyBill, FaMoneyCheckAlt, FaCalendarAlt } from 'react-icons/fa';
 
@@ -10,11 +10,10 @@ const TransactionShow = () => {
 
   return (
     <div className="transactionShow">
-      <h2>Mois: {currentMonth}</h2>
-      <h3>Montant restant: {remainingBudget} DH</h3>
- 
-      
-          {/* Section droite pour afficher les catégories */}
+    <div className="header">
+        <h4>Mois: {currentMonth}</h4>
+        <h5>Montant restant: {remainingBudget} DH</h5>
+      </div>
           {categories.map(category => (
             <Card key={category._id} className="mb-3">
               <Card.Body>

@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 
 const AuthContext = createContext();
 
+
+
 const AuthProvider = ({ children }) => {
   // Add prop validation for 'children'
   AuthProvider.propTypes = {
