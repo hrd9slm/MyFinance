@@ -23,8 +23,16 @@ export const createTransaction = async (req, res) => {
     });
 
     // Mettre à jour le budget de la catégorie
-    existingCategory.remainingBudget =existingCategory.budget - amount;
+    existingCategory.remainingBudget = existingCategory.budget - amount;
     await existingCategory.save();
+
+    // Mettre à jour le salaire de l'utilisateur
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      throw new Error('User not found');
+    }
+    user.salary -= amount; // Soustraire le montant de la transaction du salaire de l'utilisateur
+    await user.save();
 
     res.status(201).json(transaction);
   } catch (error) {
@@ -69,6 +77,14 @@ export const updateTransaction = async (req, res) => {
     transaction.date = date;
     transaction.description = description;
     await transaction.save();
+
+    // Update the user's salary
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      throw new Error('User not found');
+    }
+    user.salary -= amountDifference; // Ajuster le salaire en fonction de la différence de montant
+    await user.save();
 
     // If the category has not changed, only update the remainingBudget in the same category
     if (originalCategory.toString() === newCategory.toString()) {
@@ -127,6 +143,14 @@ export const deleteTransaction = async (req, res) => {
     category.remainingBudget += transaction.amount;
     await category.save();
 
+    // Update the user's salary
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      throw new Error('User not found');
+    }
+    user.salary += transaction.amount; // Ajouter le montant de la transaction au salaire de l'utilisateur
+    await user.save();
+
     // Delete the transaction
     await Transaction.findByIdAndDelete(transactionId);
 
@@ -135,4 +159,3 @@ export const deleteTransaction = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
-
