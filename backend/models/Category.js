@@ -16,7 +16,7 @@ const CategorySchema = new mongoose.Schema({
   },
   remainingBudget: {
     type: Number,
-    default: 0  
+     
   }
 });
 

@@ -1,52 +1,50 @@
-import { createContext, useState, useEffect } from 'react';
-import axios from 'axios';
-import PropTypes from 'prop-types';
-import { useNavigate } from 'react-router-dom';
+import { createContext, useState, useEffect } from "react";
+import axios from "axios";
+import PropTypes from "prop-types";
+import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext();
 
-
-
 const AuthProvider = ({ children }) => {
-  // Add prop validation for 'children'
   AuthProvider.propTypes = {
     children: PropTypes.node.isRequired,
   };
+
   const [auth, setAuth] = useState({
-    token: localStorage.getItem('token'),
+    token: localStorage.getItem("token"),
     isAuthenticated: null,
     loading: true,
     user: null,
   });
 
+  
+
   useEffect(() => {
     const loadUser = async () => {
-      if (localStorage.token) {
-        setAuth((prevState) => ({
-          ...prevState,
-          token: localStorage.token,
-        }));
-
+      const token = localStorage.getItem("token");
+      if (token) {
         try {
-          const res = await axios.get('http://localhost:5000/api/auth/user', {
+          const res = await axios.get("http://localhost:5000/api/auth/user", {
             headers: {
-              'x-auth-token': localStorage.token,
+              "Authorization": `Bearer ${token}`, 
             },
           });
           setAuth({
-            token: localStorage.token,
+            token,
             isAuthenticated: true,
             loading: false,
             user: res.data,
           });
         } catch (err) {
-          localStorage.removeItem('token');
-          setAuth({
-            token: null,
-            isAuthenticated: false,
-            loading: false,
-            user: null,
-          });
+           localStorage.removeItem("token");
+           setAuth({
+             token: null,
+             isAuthenticated: false,
+             loading: false,
+             user: null,
+           });
+          console.log("err http://localhost:5000/api/auth/user")
+          console.log(err);
         }
       } else {
         setAuth({
@@ -63,13 +61,14 @@ const AuthProvider = ({ children }) => {
 
   const register = async (formData) => {
     try {
-      const res = await axios.post('http://localhost:5000/api/auth/register', formData);
-      localStorage.setItem('token', res.data.token);
+      const res = await axios.post("http://localhost:5000/api/auth/register", formData);
+      localStorage.setItem("token", res.data.token);
       setAuth((prevState) => ({
         ...prevState,
-        ...res.data,
+        token: res.data.token,
         isAuthenticated: true,
         loading: false,
+        user: res.data.user,
       }));
     } catch (err) {
       console.error(err.response.data);
@@ -83,20 +82,21 @@ const AuthProvider = ({ children }) => {
   };
 
   const navigate = useNavigate();
-  
+
   const login = async (formData) => {
     try {
-      const res = await axios.post('http://localhost:5000/api/auth/login', formData);
-      console.log(res.data);
-      localStorage.setItem('token', res.data.token);
+      const res = await axios.post("http://localhost:5000/api/auth/login", formData);
+      console.log("Token after login:", res.data.token);
+      localStorage.setItem("token", res.data.token);
       setAuth((prevState) => ({
         ...prevState,
-        ...res.data,
+        token: res.data.token,
         isAuthenticated: true,
         loading: false,
+        user: res.data.user,
       }));
-      navigate('/');
-      console.log('Logged in');
+      navigate("/");
+      console.log("Logged in");
     } catch (err) {
       console.error(err.response.data);
       setAuth({
@@ -109,7 +109,7 @@ const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
-    localStorage.removeItem('token');
+    localStorage.removeItem("token");
     setAuth({
       token: null,
       isAuthenticated: false,
@@ -117,6 +117,12 @@ const AuthProvider = ({ children }) => {
       user: null,
     });
   };
+
+  useEffect(() => {
+    // Log the current state of 'auth' and 'localStorage' token
+    console.log("Auth state after refresh:", auth);
+    console.log("Token in localStorage:", localStorage.getItem("token"));
+  }, [auth]);
 
   return (
     <AuthContext.Provider value={{ auth, register, login, logout }}>

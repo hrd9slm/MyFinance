@@ -44,3 +44,21 @@ export const getUser = async (req, res) => {
     res.status(500).send('Server error');
   }
 };
+
+/********************************* salary */
+
+export const updateSalary = async (req, res) => {
+  const { salary } = req.body;
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user) return res.status(404).json({ error: 'User not found' });
+
+    user.salary = salary;
+    await user.save();
+
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+

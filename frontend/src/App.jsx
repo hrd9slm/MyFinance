@@ -6,6 +6,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { TransactionProvider } from "./context/TransactionContext";
 import Register from './components/Register';
 import User from './components/User';
+
 import { AuthProvider } from './context/AuthContext';
 import Home from './pages/Home';
 
