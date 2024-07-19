@@ -5,13 +5,12 @@ import { useNavigate } from 'react-router-dom';
 
 const AuthContext = createContext();
 
-
-
 const AuthProvider = ({ children }) => {
   // Add prop validation for 'children'
   AuthProvider.propTypes = {
     children: PropTypes.node.isRequired,
   };
+
   const [auth, setAuth] = useState({
     token: localStorage.getItem('token'),
     isAuthenticated: null,
@@ -21,25 +20,30 @@ const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const loadUser = async () => {
-      if (localStorage.token) {
+      const token = localStorage.getItem('token');
+      if (token) {
         setAuth((prevState) => ({
           ...prevState,
-          token: localStorage.token,
+          token,
         }));
 
+        console.log('Token found in localStorage:', token);
+
         try {
+          console.log('Sending token in headers:', token);
           const res = await axios.get('http://localhost:5000/api/auth/user', {
             headers: {
-              'x-auth-token': localStorage.token,
+              'Authorization': `Bearer ${token}`,
             },
           });
           setAuth({
-            token: localStorage.token,
+            token,
             isAuthenticated: true,
             loading: false,
             user: res.data,
           });
         } catch (err) {
+          console.error('Error fetching user:', err);
           localStorage.removeItem('token');
           setAuth({
             token: null,
@@ -65,14 +69,16 @@ const AuthProvider = ({ children }) => {
     try {
       const res = await axios.post('http://localhost:5000/api/auth/register', formData);
       localStorage.setItem('token', res.data.token);
+      console.log('Token set in localStorage after register:', res.data.token);
       setAuth((prevState) => ({
         ...prevState,
-        ...res.data,
+        token: res.data.token,
         isAuthenticated: true,
         loading: false,
+        user: res.data.user,
       }));
     } catch (err) {
-      console.error(err.response.data);
+      console.error('Error during registration:', err.response.data);
       setAuth({
         token: null,
         isAuthenticated: false,
@@ -83,22 +89,22 @@ const AuthProvider = ({ children }) => {
   };
 
   const navigate = useNavigate();
-  
+
   const login = async (formData) => {
     try {
       const res = await axios.post('http://localhost:5000/api/auth/login', formData);
-      console.log(res.data);
       localStorage.setItem('token', res.data.token);
+      console.log('Token set in localStorage after login:', res.data.token);
       setAuth((prevState) => ({
         ...prevState,
-        ...res.data,
+        token: res.data.token,
         isAuthenticated: true,
         loading: false,
+        user: res.data.user,
       }));
       navigate('/');
-      console.log('Logged in');
     } catch (err) {
-      console.error(err.response.data);
+      console.error('Error during login:', err.response.data);
       setAuth({
         token: null,
         isAuthenticated: false,
