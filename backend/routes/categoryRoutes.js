@@ -12,13 +12,7 @@ const router = express.Router();
    .put(protect, updateCategory) 
    .delete(protect, deleteCategory); 
 
-//  router.route('/')
-//    .post( createCategory)
-//    .get( getCategories);
 
-// router.route('/:id')
-//   .put( updateCategory) 
-//   .delete( deleteCategory); 
 
  
 export default router;

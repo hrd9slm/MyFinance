@@ -10,13 +10,15 @@ const TransactionShow = () => {
 
 
    const getLastTransactionDate = (categoryId) => {
-     const categoryTransactions = transactions.filter(transaction => transaction.category === categoryId);
+  
+      const categoryTransactions =  transactions.filter(transaction => transaction.category === categoryId);
      if (categoryTransactions.length === 0) return 'N/A';
      const lastTransaction = categoryTransactions.reduce((latest, transaction) => {
        const transactionDate = new Date(transaction.date);
        return transactionDate > latest ? transactionDate : latest;
      }, new Date(0));
      return lastTransaction.toLocaleDateString();
+
    };
 
   return (
@@ -38,11 +40,10 @@ const TransactionShow = () => {
               </Card.Body>
             </Card>
           ))}
-       
       
-      
-
     </div>
+
+    
   );
 };
 

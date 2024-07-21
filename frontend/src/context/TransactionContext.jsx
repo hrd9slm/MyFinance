@@ -66,12 +66,32 @@ export const TransactionProvider = ({ children }) => {
     }
   };
 
+  const updateTransaction = async (id, updatedTransaction) => {
+    try {
+      const response = await axiosInstance.put(`/transactions/${id}`, updatedTransaction);
+      setTransactions(transactions.map(transaction => 
+        transaction._id === id ? response.data : transaction
+      ));
+    } catch (error) {
+      console.error('Error updating transaction:', error);
+    }
+  };
+
+  const deleteTransaction = async (id) => {
+    try {
+      await axiosInstance.delete(`/transactions/${id}`);
+      setTransactions(transactions.filter(transaction => transaction._id !== id));
+    } catch (error) {
+      console.error('Error deleting transaction:', error);
+    }
+  };
+
   if (isLoading) {
     return <div>Loading...</div>; 
   }
 
   return (
-    <TransactionContext.Provider value={{ transactions, categories, addTransaction,remainingSalary,auth }}>
+    <TransactionContext.Provider value={{ transactions, categories, addTransaction,remainingSalary,auth,deleteTransaction,updateTransaction }}>
       {children}
     </TransactionContext.Provider>
   );
