@@ -3,6 +3,8 @@ import Transaction from '../models/Transaction.js';
 
 
 import Category from '../models/Category.js';
+import User from '../models/User.js';
+/*************************** */
 
 export const createTransaction = async (req, res) => {
   const { category, amount, date, description } = req.body;
@@ -12,6 +14,7 @@ export const createTransaction = async (req, res) => {
     if (!existingCategory) {
       throw new Error('Category not found');
     }
+    console.log("existingCategory",existingCategory);
 
     // Créer la transaction
     const transaction = await Transaction.create({
@@ -20,27 +23,28 @@ export const createTransaction = async (req, res) => {
       amount,
       date,
       description
-    });
+    }); 
 
     // Mettre à jour le budget de la catégorie
-    existingCategory.remainingBudget = existingCategory.budget - amount;
+    existingCategory.remainingBudget = existingCategory.remainingBudget - amount;
     await existingCategory.save();
-
+    console.log("remainingBudget-category",existingCategory.remainingBudget);
     // Mettre à jour le salaire de l'utilisateur
     const user = await User.findById(req.user.id);
     if (!user) {
       throw new Error('User not found');
     }
-    user.salary -= amount; // Soustraire le montant de la transaction du salaire de l'utilisateur
+    
+    user.remainingSalary -= amount; // Soustraire le montant de la transaction du salaire de l'utilisateur
     await user.save();
-
+console.log(user.remainingSalary );
     res.status(201).json(transaction);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
 
-
+/************************************************* */
 export const getTransactions = async (req, res) => {
   try {
     // const transactions = await Transaction.find().populate('category');
@@ -83,7 +87,7 @@ export const updateTransaction = async (req, res) => {
     if (!user) {
       throw new Error('User not found');
     }
-    user.salary -= amountDifference; // Ajuster le salaire en fonction de la différence de montant
+    user.remainingSalary -= amountDifference; // Ajuster le salaire en fonction de la différence de montant
     await user.save();
 
     // If the category has not changed, only update the remainingBudget in the same category
@@ -148,7 +152,7 @@ export const deleteTransaction = async (req, res) => {
     if (!user) {
       throw new Error('User not found');
     }
-    user.salary += transaction.amount; // Ajouter le montant de la transaction au salaire de l'utilisateur
+    user.remainingSalary += transaction.amount; // Ajouter le montant de la transaction au salaire de l'utilisateur
     await user.save();
 
     // Delete the transaction

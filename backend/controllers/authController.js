@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 
 export const register = async (req, res) => {
-  const { firstName, lastName, email, password } = req.body;
+  const { firstName, lastName, email, password ,salary} = req.body;
   try {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -12,7 +12,8 @@ export const register = async (req, res) => {
       firstName, 
       lastName, 
       email, 
-      password: hashedPassword 
+      password: hashedPassword,
+      salary
     });
     
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });

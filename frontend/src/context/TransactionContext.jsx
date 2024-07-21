@@ -13,6 +13,8 @@ export const TransactionProvider = ({ children }) => {
   const [transactions, setTransactions] = useState([]);
   const [categories, setCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [remainingSalary, setRemainingSalary] = useState(0);
+
 
   // Ajouter un intercepteur pour inclure le token dans les en-têtes de chaque requête
   axiosInstance.interceptors.request.use((config) => {
@@ -29,6 +31,7 @@ export const TransactionProvider = ({ children }) => {
       try {
         const response = await axiosInstance.get('/transactions');
         setTransactions(response.data);
+  
       } catch (error) {
         console.error('Error fetching transactions:', error);
       }
@@ -48,6 +51,11 @@ export const TransactionProvider = ({ children }) => {
     fetchTransactions();
     fetchCategories();
   }, [auth.token]); 
+  useEffect(() => {
+    if (auth.user) {
+      setRemainingSalary(auth.user.remainingSalary); 
+    }
+  }, [auth.user]);
 
   const addTransaction = async (transaction) => {
     try {
@@ -63,7 +71,7 @@ export const TransactionProvider = ({ children }) => {
   }
 
   return (
-    <TransactionContext.Provider value={{ transactions, categories, addTransaction,auth }}>
+    <TransactionContext.Provider value={{ transactions, categories, addTransaction,remainingSalary,auth }}>
       {children}
     </TransactionContext.Provider>
   );

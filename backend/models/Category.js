@@ -20,6 +20,14 @@ const CategorySchema = new mongoose.Schema({
   }
 });
 
+CategorySchema.pre('save', function(next) {
+  if (this.isNew && !this.remainingBudget) {
+    this.remainingBudget = this.budget;
+  }
+  next();
+});
+
+
 const Category = mongoose.model('Category', CategorySchema);
 
 export default Category;
