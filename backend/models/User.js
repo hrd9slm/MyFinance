@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
 
-
 const UserSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -21,7 +20,11 @@ const UserSchema = new mongoose.Schema({
   },
   salary: {
     type: Number,
-    default: 0 
+    required: true
+  },
+  remainingSalary: {
+    type: Number,
+  
   },
   newsletterSubscribed: {
     type: Boolean,
@@ -29,8 +32,12 @@ const UserSchema = new mongoose.Schema({
   }
 });
 
-
-
+UserSchema.pre('save', function(next) {
+  if (this.isNew && !this.remainingSalary) {
+    this.remainingSalary = this.salary;
+  }
+  next();
+});
 const User = mongoose.model('User', UserSchema);
 
 export default User;

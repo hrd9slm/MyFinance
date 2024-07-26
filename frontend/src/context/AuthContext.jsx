@@ -35,6 +35,7 @@ const AuthProvider = ({ children }) => {
             loading: false,
             user: res.data,
           });
+         
         } catch (err) {
            localStorage.removeItem("token");
            setAuth({
@@ -43,6 +44,7 @@ const AuthProvider = ({ children }) => {
              loading: false,
              user: null,
            });
+           
           console.log("err http://localhost:5000/api/auth/user")
           console.log(err);
         }

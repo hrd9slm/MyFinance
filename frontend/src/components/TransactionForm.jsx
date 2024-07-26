@@ -3,7 +3,7 @@ import { Form, Button } from 'react-bootstrap';
 import { TransactionContext } from '../context/TransactionContext';
 
 const TransactionForm = () => {
-  const { addTransaction, categories } = useContext(TransactionContext);
+  const { addTransaction, categories,auth } = useContext(TransactionContext);
   const [transaction, setTransaction] = useState('');
   const [amount, setAmount] = useState('');
   const [date, setDate] = useState('');
@@ -11,7 +11,7 @@ const TransactionForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const newTransaction = { description:transaction, amount, date, category };
+    const newTransaction = {  user: auth.user.id,description:transaction, amount, date, category };
     addTransaction(newTransaction);
     setTransaction('');
     setAmount('');

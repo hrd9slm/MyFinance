@@ -13,6 +13,8 @@ export const TransactionProvider = ({ children }) => {
   const [transactions, setTransactions] = useState([]);
   const [categories, setCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [remainingSalary, setRemainingSalary] = useState(0);
+
 
   // Ajouter un intercepteur pour inclure le token dans les en-têtes de chaque requête
   axiosInstance.interceptors.request.use((config) => {
@@ -29,6 +31,7 @@ export const TransactionProvider = ({ children }) => {
       try {
         const response = await axiosInstance.get('/transactions');
         setTransactions(response.data);
+  
       } catch (error) {
         console.error('Error fetching transactions:', error);
       }
@@ -48,6 +51,11 @@ export const TransactionProvider = ({ children }) => {
     fetchTransactions();
     fetchCategories();
   }, [auth.token]); 
+  useEffect(() => {
+    if (auth.user) {
+      setRemainingSalary(auth.user.remainingSalary); 
+    }
+  }, [auth.user]);
 
   const addTransaction = async (transaction) => {
     try {
@@ -58,12 +66,32 @@ export const TransactionProvider = ({ children }) => {
     }
   };
 
+  const updateTransaction = async (id, updatedTransaction) => {
+    try {
+      const response = await axiosInstance.put(`/transactions/${id}`, updatedTransaction);
+      setTransactions(transactions.map(transaction => 
+        transaction._id === id ? response.data : transaction
+      ));
+    } catch (error) {
+      console.error('Error updating transaction:', error);
+    }
+  };
+
+  const deleteTransaction = async (id) => {
+    try {
+      await axiosInstance.delete(`/transactions/${id}`);
+      setTransactions(transactions.filter(transaction => transaction._id !== id));
+    } catch (error) {
+      console.error('Error deleting transaction:', error);
+    }
+  };
+
   if (isLoading) {
     return <div>Loading...</div>; 
   }
 
   return (
-    <TransactionContext.Provider value={{ transactions, categories, addTransaction, auth }}>
+    <TransactionContext.Provider value={{ transactions, categories, addTransaction,remainingSalary,auth,deleteTransaction,updateTransaction }}>
       {children}
     </TransactionContext.Provider>
   );

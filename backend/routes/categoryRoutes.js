@@ -15,13 +15,6 @@ router.route('/')
 
 
 
-//  router.route('/')
-//    .post( createCategory)
-//    .get( getCategories);
-
-// router.route('/:id')
-//   .put( updateCategory) 
-//   .delete( deleteCategory); 
 
  
 export default router;

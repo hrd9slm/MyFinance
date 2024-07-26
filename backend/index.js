@@ -7,7 +7,7 @@ import transactionRoutes from './routes/transactionRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import { errorHandler } from './middlewares/errorMiddleware.js';
 import cors from 'cors';
-// import statsRoutes from './routes/statsRoutes.js';
+import statsRoutes from './routes/statsRoutes.js';
 
 dotenv.config();
 
@@ -20,7 +20,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/transactions', transactionRoutes);
 app.use('/api/users', userRoutes);
-// app.use('/api/stats', statsRoutes);
+app.use('/api/stats', statsRoutes);
 
 app.use(errorHandler);
 

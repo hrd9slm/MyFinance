@@ -1,97 +1,94 @@
-// import Transaction from '../models/Transaction.js';
-// import Category from '../models/Category.js';
-// import Profile from '../models/Profile.js';
+import Transaction from '../models/Transaction.js';
+import Category from '../models/Category.js';
+import User from '../models/User.js';
+import mongoose from 'mongoose';
 
-// export const getTotalExpensesByCategory = async (req, res) => {
-//   try {
-//     const userId = req.user.id;
-//     const categories = await Category.find({ user: userId });
-    
-//     const totalExpensesByCategory = await Promise.all(
-//       categories.map(async (category) => {
-//         const totalAmount = await Transaction.aggregate([
-//           { $match: { user: userId, category: category._id } },
-//           { $group: { _id: null, totalAmount: { $sum: "$amount" } } },
-//         ]);
-        
-//         return {
-//           category: category.name,
-//           totalAmount: totalAmount.length ? totalAmount[0].totalAmount : 0,
-//         };
-//       })
-//     );
+// Total Expenses by Category
+export const getTotalExpensesByCategory = async (req, res) => {
+  try {
+    const userId = new mongoose.Types.ObjectId(req.user.id);
 
+    const totalExpensesByCategory = await Transaction.aggregate([
+      { $match: { user: userId } }, // Assurez-vous que l'ID utilisateur est correct
+      {
+        $group: {
+          _id: "$category", // Regrouper par catégorie
+          totalAmount: { $sum: "$amount" } // Calculer le total des montants
+        }
+      }
+    ]);
 
-//     const profile = await Profile.findOne({ user: userId });
-//     const salary = profile ? profile.salary : 0;
+    console.log('Total Expenses by Category (Without Lookup):', totalExpensesByCategory);
 
-//     res.json({ totalExpensesByCategory, salary });
-//   } catch (error) {
-//     res.status(400).json({ error: error.message });
-//   }
-// };
+    res.json({ totalExpensesByCategory });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
 
-// export const getTotalExpensesByMonth = async (req, res) => {
-//   try {
-//     const userId = req.user.id;
-//     const totalExpensesByMonth = await Transaction.aggregate([
-//       { $match: { user: userId } },
-//       {
-//         $group: {
-//           _id: { $month: "$date" },
-//           totalAmount: { $sum: "$amount" },
-//         },
-//       },
-//       { $sort: { "_id": 1 } },
-//     ]);
+// Total Expenses by Month
+export const getTotalExpensesByMonth = async (req, res) => {
+  try {
+    const userId = new mongoose.Types.ObjectId(req.user.id);
 
-   
-//     const profile = await Profile.findOne({ user: userId });
-//     const salary = profile ? profile.salary : 0;
+    const totalExpensesByMonth = await Transaction.aggregate([
+      { $match: { user: userId } },
+      {
+        $group: {
+          _id: { $month: "$date" },
+          totalAmount: { $sum: "$amount" },
+        },
+      },
+      {
+        $sort: { "_id": 1 },
+      },
+    ]);
 
-//     res.json({ totalExpensesByMonth, salary });
-//   } catch (error) {
-//     res.status(400).json({ error: error.message });
-//   }
-// };
+    res.json({ totalExpensesByMonth });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
 
-// export const getRemainingBudgetByCategory = async (req, res) => {
-//   try {
-//     const userId = req.user.id;
-//     const categories = await Category.find({ user: userId });
-    
-//     const remainingBudgetByCategory = categories.map(category => ({
-//       category: category.name,
-//       remainingBudget: category.remainingBudget,
-//     }));
+// Remaining Budget by Category
+export const getRemainingBudgetByCategory = async (req, res) => {
+  try {
+    const userId = new mongoose.Types.ObjectId(req.user.id);
 
-   
-//     const profile = await Profile.findOne({ user: userId });
-//     const salary = profile ? profile.salary : 0;
-    
-//     res.json({ remainingBudgetByCategory, salary });
-//   } catch (error) {
-//     res.status(400).json({ error: error.message });
-//   }
-// };
+    const remainingBudgetByCategory = await Category.find({ user: userId }).select('name remainingBudget');
+    res.json({ remainingBudgetByCategory });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
 
-// export const getTotalUserExpenses = async (req, res) => {
-//   try {
-//     const userId = req.user.id;
-//     const totalUserExpenses = await Transaction.aggregate([
-//       { $match: { user: userId } },
-//       { $group: { _id: null, totalAmount: { $sum: "$amount" } } },
-//     ]);
+// Total User Expenses
+export const getTotalUserExpenses = async (req, res) => {
+  try {
+    const userId = new mongoose.Types.ObjectId(req.user.id);
 
-    
-//     const profile = await Profile.findOne({ user: userId });
-//     const salary = profile ? profile.salary : 0;
+    const userExpenses = await Transaction.aggregate([
+      { $match: { user: userId } },
+      {
+        $group: {
+          _id: "$user",
+          totalAmount: { $sum: "$amount" },
+        },
+      },
+    ]);
 
-//     res.json({
-//       totalUserExpenses: totalUserExpenses.length ? totalUserExpenses[0] : { totalAmount: 0 },
-//       salary,
-//     });
-//   } catch (error) {
-//     res.status(400).json({ error: error.message });
-//   }
-// };
+    if (userExpenses.length === 0) {
+      return res.status(400).json({ error: "No expenses found for this user" });
+    }
+
+    const user = await User.findById(userId).select('salary');
+
+    if (!user) {
+      return res.status(400).json({ error: "User not found" });
+    }
+
+    res.json({ totalUserExpenses: userExpenses[0], salary: user.salary });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
