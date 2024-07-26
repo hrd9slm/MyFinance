@@ -70,6 +70,7 @@ const AuthProvider = ({ children }) => {
         loading: false,
         user: res.data.user,
       }));
+      navigate("/profile");
     } catch (err) {
       console.error('Error during registration:', err.response.data);
       setAuth({

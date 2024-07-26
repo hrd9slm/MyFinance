@@ -6,7 +6,8 @@ import { AuthContext } from "../context/AuthContext";
 
 
 const Register = () => {
-  const { register } = useContext(AuthContext);
+  
+  const { register:authRegister } = useContext(AuthContext);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -23,7 +24,7 @@ const Register = () => {
   
   const onSubmit = async (e) => {
     e.preventDefault();
-    register(formData);
+    authRegister(formData);
     
   };
 

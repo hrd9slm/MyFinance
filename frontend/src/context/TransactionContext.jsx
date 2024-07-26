@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, useContext } from 'react';
+import  { createContext, useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { AuthContext } from './AuthContext';
 
@@ -63,7 +63,7 @@ export const TransactionProvider = ({ children }) => {
   }
 
   return (
-    <TransactionContext.Provider value={{ transactions, categories, addTransaction,auth }}>
+    <TransactionContext.Provider value={{ transactions, categories, addTransaction, auth }}>
       {children}
     </TransactionContext.Provider>
   );

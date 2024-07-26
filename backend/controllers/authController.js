@@ -2,21 +2,23 @@ import User from '../models/User.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 
+
+
 export const register = async (req, res) => {
-  const { firstName, lastName, email, password } = req.body;
+  const { name, email, password } = req.body;
   try {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
-    
     const user = await User.create({ 
-      firstName, 
-      lastName, 
+      name,
       email, 
       password: hashedPassword 
     });
     
+    console.log("register user", user);
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
     res.status(201).json({ token });
+    
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
