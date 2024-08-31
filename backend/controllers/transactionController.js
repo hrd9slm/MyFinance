@@ -1,9 +1,6 @@
-import Transaction from '../models/Transaction.js';
-
-
-
-import Category from '../models/Category.js';
-import User from '../models/User.js';
+import Transaction from "../models/Transaction.js";
+import Category from "../models/Category.js";
+import User from "../models/User.js";
 /*************************** */
 
 export const createTransaction = async (req, res) => {
@@ -12,9 +9,9 @@ export const createTransaction = async (req, res) => {
     // Vérifier si la catégorie existe
     const existingCategory = await Category.findById(category);
     if (!existingCategory) {
-      throw new Error('Category not found');
+      throw new Error("Category not found");
     }
-    console.log("existingCategory",existingCategory);
+    console.log("existingCategory", existingCategory);
 
     // Créer la transaction
     const transaction = await Transaction.create({
@@ -22,22 +19,23 @@ export const createTransaction = async (req, res) => {
       category,
       amount,
       date,
-      description
-    }); 
+      description,
+    });
 
     // Mettre à jour le budget de la catégorie
-    existingCategory.remainingBudget = existingCategory.remainingBudget - amount;
+    existingCategory.remainingBudget =
+      existingCategory.remainingBudget - amount;
     await existingCategory.save();
-    console.log("remainingBudget-category",existingCategory.remainingBudget);
+    console.log("remainingBudget-category", existingCategory.remainingBudget);
     // Mettre à jour le salaire de l'utilisateur
     const user = await User.findById(req.user.id);
     if (!user) {
-      throw new Error('User not found');
+      throw new Error("User not found");
     }
-    
+
     user.remainingSalary -= amount; // Soustraire le montant de la transaction du salaire de l'utilisateur
     await user.save();
-console.log(user.remainingSalary );
+    console.log(user.remainingSalary);
     res.status(201).json(transaction);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -48,14 +46,15 @@ console.log(user.remainingSalary );
 export const getTransactions = async (req, res) => {
   try {
     // const transactions = await Transaction.find().populate('category');
-     const transactions = await Transaction.find({ user: req.user.id }).populate('category');
-   
+    const transactions = await Transaction.find({ user: req.user.id }).populate(
+      "category"
+    );
+
     res.json(transactions);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
-
 
 export const updateTransaction = async (req, res) => {
   const { id } = req.params;
@@ -65,7 +64,7 @@ export const updateTransaction = async (req, res) => {
     // Find the transaction to update
     const transaction = await Transaction.findById(id);
     if (!transaction) {
-      throw new Error('Transaction not found');
+      throw new Error("Transaction not found");
     }
 
     // Save the original category ID and amount for later use
@@ -85,7 +84,7 @@ export const updateTransaction = async (req, res) => {
     // Update the user's salary
     const user = await User.findById(req.user.id);
     if (!user) {
-      throw new Error('User not found');
+      throw new Error("User not found");
     }
     user.remainingSalary -= amountDifference; // Ajuster le salaire en fonction de la différence de montant
     await user.save();
@@ -110,7 +109,7 @@ export const updateTransaction = async (req, res) => {
       // Update the new category
       const updatedCat = await Category.findById(newCategory);
       if (!updatedCat) {
-        throw new Error('New category not found');
+        throw new Error("New category not found");
       }
       updatedCat.remainingBudget -= amount;
       await updatedCat.save();
@@ -122,10 +121,7 @@ export const updateTransaction = async (req, res) => {
   }
 };
 
-
-
 // Supprime une transaction
-
 
 export const deleteTransaction = async (req, res) => {
   const { id: transactionId } = req.params;
@@ -134,13 +130,13 @@ export const deleteTransaction = async (req, res) => {
     // Find the transaction to delete
     const transaction = await Transaction.findById(transactionId);
     if (!transaction) {
-      return res.status(404).json({ error: 'Transaction not found' });
+      return res.status(404).json({ error: "Transaction not found" });
     }
 
     // Find the associated category
     const category = await Category.findById(transaction.category);
     if (!category) {
-      return res.status(404).json({ error: 'Category not found' });
+      return res.status(404).json({ error: "Category not found" });
     }
 
     // Update the remainingBudget of the category
@@ -150,7 +146,7 @@ export const deleteTransaction = async (req, res) => {
     // Update the user's salary
     const user = await User.findById(req.user.id);
     if (!user) {
-      throw new Error('User not found');
+      throw new Error("User not found");
     }
     user.remainingSalary += transaction.amount; // Ajouter le montant de la transaction au salaire de l'utilisateur
     await user.save();
@@ -158,7 +154,7 @@ export const deleteTransaction = async (req, res) => {
     // Delete the transaction
     await Transaction.findByIdAndDelete(transactionId);
 
-    res.json({ message: 'Transaction deleted successfully' });
+    res.json({ message: "Transaction deleted successfully" });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

@@ -5,7 +5,7 @@ import { AuthContext } from './AuthContext';
 export const TransactionContext = createContext();
 
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:5000/api',
+  baseURL: 'http://localhost:8000/api',
 });
 
 export const TransactionProvider = ({ children }) => {
@@ -16,7 +16,6 @@ export const TransactionProvider = ({ children }) => {
   const [remainingSalary, setRemainingSalary] = useState(0);
 
 
-  // Ajouter un intercepteur pour inclure le token dans les en-têtes de chaque requête
   axiosInstance.interceptors.request.use((config) => {
     if (auth.token) {
       config.headers['Authorization'] = `Bearer ${auth.token}`;

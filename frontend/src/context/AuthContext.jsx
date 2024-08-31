@@ -24,7 +24,7 @@ const AuthProvider = ({ children }) => {
       const token = localStorage.getItem("token");
       if (token) {
         try {
-          const res = await axios.get("http://localhost:5000/api/auth/user", {
+          const res = await axios.get("http://localhost:8000/api/auth/user", {
             headers: {
               "Authorization": `Bearer ${token}`, 
             },
@@ -45,7 +45,7 @@ const AuthProvider = ({ children }) => {
              user: null,
            });
            
-          console.log("err http://localhost:5000/api/auth/user")
+          console.log("err http://localhost:8080/api/auth/user")
           console.log(err);
         }
       } else {
@@ -63,7 +63,7 @@ const AuthProvider = ({ children }) => {
 
   const register = async (formData) => {
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/register", formData);
+      const res = await axios.post("http://localhost:8080/api/auth/register", formData);
       localStorage.setItem("token", res.data.token);
       setAuth((prevState) => ({
         ...prevState,
@@ -88,7 +88,7 @@ const AuthProvider = ({ children }) => {
 
   const login = async (formData) => {
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/login", formData);
+      const res = await axios.post("http://localhost:8080/api/auth/login", formData);
       console.log("Token after login:", res.data.token);
       localStorage.setItem("token", res.data.token);
       setAuth((prevState) => ({

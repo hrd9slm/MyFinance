@@ -14,7 +14,10 @@ dotenv.config();
  connectDB();
 
 const app = express();
-app.use(express.json(),cors());
+app.use(express.json(),cors(corsoptions));
+const option={
+  origin:"http://localhost"
+}
 
 app.use('/api/auth', authRoutes);
 app.use('/api/categories', categoryRoutes);

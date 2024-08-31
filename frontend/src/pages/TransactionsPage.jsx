@@ -7,7 +7,7 @@ const TransactionsPage = () => {
   return (
     <div >
       <Home/>
-      <h1>MY Transactions</h1>
+    
       <div className='transactionPage' >
       <TransactionShow /> 
       <TransactionForm />

@@ -1,1 +1,77 @@
 @import './assets/Auth.module.css';
+.homepage {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+   
+  }
+  
+  .homepage-header {
+    background-color: rgba(12, 37, 68, 0.95); /* Dark blue with transparency */
+    color: white;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .homepage-nav a {
+    color: #cdcdcd; /* Light gray */
+    margin: 0 10px;
+    text-decoration: none;
+  }
+  
+  .homepage-hero {
+    background: linear-gradient(
+      90deg,
+      rgba(12, 37, 68, 1) 0%,
+      rgba(23, 53, 95, 1) 35%,
+      rgba(26, 72, 111, 1) 100%
+    );
+    color: white;
+    text-align: center;
+    padding: 50px 20px;
+  }
+  
+  .homepage-button {
+    background-color: #ffffff40; /* Semi-transparent white */
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+  }
+  
+  .homepage-button:hover {
+    background-color: #fffbe7; /* Light hover effect */
+    color:rgba(12, 37, 68, 1)
+    
+  }
+  
+  .homepage-features,
+  .homepage-security,
+  .homepage-management,
+  .homepage-footer {
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .homepage-footer {
+    background-color: rgba(12, 37, 68, 0.95); /* Dark blue with transparency */
+    color: white;
+    text-align: center;
+    padding: 10px;
+  }
+
+  
+  .features-image {
+    max-height: 250px; /* Adjust as needed for your design */
+  }
+  
+  .security-image {
+    max-height: 250px; /* Adjust as needed for your design */
+  }
+  
+  .management-image {
+    max-height: 250px; /* Adjust as needed for your design */
+  }

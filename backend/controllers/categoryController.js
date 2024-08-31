@@ -12,8 +12,8 @@ export const createCategory = async (req, res) => {
 
 export const getCategories = async (req, res) => {
   try {
-    // const categories = await Category.find();
-     const categories = await Category.find({ user: req.user.id });
+     const categories = await Category.find();
+     //const categories = await Category.find({ user: req.user.id });
     res.json(categories);
   } catch (error) {
     res.status(400).json({ error: error.message });
