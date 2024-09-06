@@ -55,19 +55,19 @@ jobs:
           docker build -t ${{ secrets.DOCKER_USERNAME }}/backend:latest .
           docker push ${{ secrets.DOCKER_USERNAME }}/backend:latest
 
-#   deploy:
-#     needs: build_and_push
-#     runs-on: ubuntu-latest
-#     steps:
-#     - name: Deploy to VPS
-#       uses: appleboy/ssh-action@v1.0.3
-#       with:
-#         host: ${{ secrets.EC_HOST }}
-#         username: ${{ secrets.EC_USERNAME }}
-#         key: ${{ secrets.EC_PRIVATE_KEY }}
-#         port: 22
-#         script: |
-#           docker pull ${{ secrets.DOCKER_USERNAME }}/backend:latest
-#           docker stop backend || true
-#           docker rm backend || true
-#           docker run -d --name backend -p 8000:8000 ${{ secrets.DOCKER_USERNAME }}/backend:latest
+  deploy:
+      needs: build_and_push
+      runs-on: ubuntu-latest
+      steps:
+        - name: Deploy to VPS
+          uses: appleboy/ssh-action@v1.0.3
+          with:
+            host: ${{ secrets.EC_HOST }}
+            username: ${{ secrets.EC_USERNAME }}
+            key: ${{ secrets.EC_PRIVATE_KEY }}
+            port: 22
+            script: |
+              docker pull ${{ secrets.DOCKER_USERNAME }}/backend:latest
+              docker stop backend || true
+              docker rm backend || true
+              docker run -d --name backend -p 8000:8000 ${{ secrets.DOCKER_USERNAME }}/backend:latest
