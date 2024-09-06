@@ -51,7 +51,6 @@ jobs:
 
       - name: Build and push Docker image
         run: |
-          cd backend
           docker build -t ${{ secrets.DOCKER_USERNAME }}/backend:latest .
           docker push ${{ secrets.DOCKER_USERNAME }}/backend:latest
 
