@@ -1,10 +1,6 @@
 import { useState, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 
-
-
-
-
 const Register = () => {
   
   const { register:authRegister } = useContext(AuthContext);

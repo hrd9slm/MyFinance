@@ -12,12 +12,12 @@ import statsRoutes from './routes/statsRoutes.js';
 dotenv.config();
 
  connectDB();
-
-const app = express();
-app.use(express.json(),cors(corsoptions));
-const option={
+ const corsoptions={
   origin:"http://localhost"
 }
+const app = express();
+app.use(express.json(),cors(corsoptions));
+
 
 app.use('/api/auth', authRoutes);
 app.use('/api/categories', categoryRoutes);

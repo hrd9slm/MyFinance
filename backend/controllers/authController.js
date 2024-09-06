@@ -2,24 +2,22 @@ import User from '../models/User.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 
-
-
 export const register = async (req, res) => {
-  const { name, email, password } = req.body;
+  const { firstName, lastName, email, password ,salary} = req.body;
   try {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
+    
     const user = await User.create({ 
-      name,
+      firstName, 
+      lastName, 
       email, 
       password: hashedPassword,
       salary
     });
     
-    console.log("register user", user);
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
     res.status(201).json({ token });
-    
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -43,7 +41,6 @@ export const getUser = async (req, res) => {
     const user = await User.findById(req.user).select('-password');
     res.json(user);
   } catch (error) {
-    console.error(error.message);
     res.status(500).send('Server error');
   }
 };
@@ -64,4 +61,3 @@ export const updateSalary = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-

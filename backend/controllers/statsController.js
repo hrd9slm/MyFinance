@@ -9,11 +9,11 @@ export const getTotalExpensesByCategory = async (req, res) => {
     const userId = new mongoose.Types.ObjectId(req.user.id);
 
     const totalExpensesByCategory = await Transaction.aggregate([
-      { $match: { user: userId } }, // Assurez-vous que l'ID utilisateur est correct
+      { $match: { user: userId } }, 
       {
         $group: {
-          _id: "$category", // Regrouper par catégorie
-          totalAmount: { $sum: "$amount" } // Calculer le total des montants
+          _id: "$category", 
+          totalAmount: { $sum: "$amount" } 
         }
       }
     ]);

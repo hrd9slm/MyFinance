@@ -28,6 +28,7 @@ const App = () => {
             <Route path="/user" element={<User />} />
             <Route path="/TransactionList" element={<TransactionsListPage />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            
           </Routes>
           </StatisticsProvider>
         </TransactionProvider>
