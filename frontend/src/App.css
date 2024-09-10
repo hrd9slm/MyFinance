@@ -7,7 +7,7 @@
   }
   
   .homepage-header {
-    background-color: rgba(12, 37, 68, 0.95); /* Dark blue with transparency */
+    background-color: rgba(12, 37, 68, 0.95); 
     color: white;
     padding: 10px 20px;
     display: flex;
@@ -16,7 +16,7 @@
   }
   
   .homepage-nav a {
-    color: #cdcdcd; /* Light gray */
+    color: #cdcdcd;
     margin: 0 10px;
     text-decoration: none;
   }
@@ -34,7 +34,7 @@
   }
   
   .homepage-button {
-    background-color: #ffffff40; /* Semi-transparent white */
+    background-color: #ffffff40;
     color: #fff;
     padding: 10px 20px;
     border: none;
@@ -43,7 +43,7 @@
   }
   
   .homepage-button:hover {
-    background-color: #fffbe7; /* Light hover effect */
+    background-color: #fffbe7; 
     color:rgba(12, 37, 68, 1)
     
   }
@@ -57,7 +57,7 @@
   }
   
   .homepage-footer {
-    background-color: rgba(12, 37, 68, 0.95); /* Dark blue with transparency */
+    background-color: rgba(12, 37, 68, 0.95); 
     color: white;
     text-align: center;
     padding: 10px;
@@ -65,13 +65,13 @@
 
   
   .features-image {
-    max-height: 250px; /* Adjust as needed for your design */
+    max-height: 250px; 
   }
   
   .security-image {
-    max-height: 250px; /* Adjust as needed for your design */
+    max-height: 250px; 
   }
   
   .management-image {
-    max-height: 250px; /* Adjust as needed for your design */
+    max-height: 250px; 
   }
