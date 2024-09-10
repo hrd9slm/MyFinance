@@ -1,4 +1,3 @@
-// src/components/Acceuil.js
 import React from 'react';
 import financialFreedom from '../assets/images/financial-freedom.jpg';
 import organizeFinances from '../assets/images/organize-your-finances.jpg';
