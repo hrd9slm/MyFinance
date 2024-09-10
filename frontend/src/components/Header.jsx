@@ -7,7 +7,7 @@ function Header() {
       <div className="homepage-logo">Finance Tracker</div>
       <nav className="homepage-nav">
         <Link to="/">Home</Link>
-        <Link to="/about">About</Link> {/* Assuming you have an About page */}
+        <Link to="/about">About</Link>
         <Link to="/login">Login</Link>
       </nav>
     </header>
