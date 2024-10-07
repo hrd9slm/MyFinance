@@ -62,7 +62,8 @@ const TransactionForm = () => {
             ))}
           </Form.Control>
         </Form.Group>
-        <Button variant="primary" type="submit" className="btn-primary">Ajouter</Button>
+        <Button variant="primary" type="submit" className="btn-transaction">Ajouter</Button>
+        {/* <button  type="submit" className="btn-transaction">Ajouter</button> */}
       </Form> 
     </div>
   );

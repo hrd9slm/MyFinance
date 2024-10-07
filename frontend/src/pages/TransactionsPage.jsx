@@ -3,11 +3,11 @@ import TransactionForm from '../components/TransactionForm';
 import TransactionShow from '../components/TransactionShow';
 import "../index.css";
 import Home from './Home';
+import Header from '../components/Header';
 const TransactionsPage = () => {
   return (
     <div >
-      <Home/>
-      <h1>MY Transactions</h1>
+      <Header/>
       <div className='transactionPage' >
       <TransactionShow /> 
       <TransactionForm />

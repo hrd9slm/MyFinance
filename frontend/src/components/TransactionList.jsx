@@ -17,7 +17,7 @@ const TransactionList = () => {
     setTransactionId(transaction._id);
     setEditData({
       amount: transaction.amount,
-      date: transaction.date.slice(0, 10), // Formatting date to yyyy-mm-dd
+      date: transaction.date.slice(0, 10), 
       category: transaction.category,
       description: transaction.description
     });
